@@ -9,8 +9,10 @@ Fecha: 2 de Julio del 2023
 #include <locale>
 #include <iomanip>
 #include <string>
+#include <random>
 #include <sstream>
 #include <windows.h>
+#include <ctime>
 #define DESC 0.1
 //cobros por minuto en pesos
 #define CAR 139 
@@ -35,9 +37,11 @@ struct vehiculo{
 //Prototipos
 float calcularTiempo(float horaingre, float horasal, int dias);
 float calularTarifa(float tiempo,  int tipo);
+void obtenerTiempo(int mostrar);
 void mosCen(string mens);
 void mostrarTarifas();
 void ingresarDatos();
+string generarClaveAleatoria();
 void run();
 int tamPantalla();
 void pedCen(int n);
@@ -89,7 +93,29 @@ void run(){
 	system("cls");
 	if(opc==1){
 		ingresarDatos();
+		mosCen("Su clave es: ");
+		string cla=generarClaveAleatoria();
+		mosCen(cla);
+		system("pause");
 	}	
+}
+//Funcion que recibe un entero si es 1 muestra la hora, si no calcula la hora con una pasada
+void obtenerTiempo(int mostrar){
+// Obtener la marca de tiempo actual
+    time_t currentTime = time(NULL);
+    // Convertir la marca de tiempo en una estructura de tiempo local
+    tm* localTime = localtime(&currentTime);
+    // Obtener los componentes de fecha y hora
+    int year = localTime->tm_year + 1900;
+    int month = localTime->tm_mon + 1;
+    int day = localTime->tm_mday;
+    int hour = localTime->tm_hour;
+    int minute = localTime->tm_min;
+    if(mostrar==1){
+    	cout << "Fecha y hora de ingreso: " << year << "-" << month << "-" << day << " " << hour << ":" << minute <<endl;
+	}
+	//Aca iria algo para poder tener un modulo para poder guardar los datos en un archivo
+	//Que se vaya escribiendo hasta que se cierre el programa, para poder hacer reviciones del mismo despues
 }
 //Funcion que pide los datos del cliente
 void ingresarDatos(){
@@ -135,6 +161,7 @@ void ingresarDatos(){
 	mosCen("Ingrese el modelo de su vehiculo\n");
 	pedCen(10);
 	getline(cin, vehiculo.modelo);
+	obtenerTiempo(1);
 	//Aca iria algo para poder tener un modulo para poder guardar los datos en un archivo
 	//Que se vaya escribiendo hasta que se cierre el programa, para poder hacer reviciones del mismo despues
 	//Pero todavia no sabemos de eso entonces dejo un system pause :)
@@ -166,6 +193,19 @@ void mostrarTarifas(){
 	mosCen(resul2);
 	mosCen("_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n");
 	mosCen("______________________________________________________________________\n");
+}
+//Funcion que genera una clave aleatoria
+string generarClaveAleatoria(){
+	int longitud=5;
+    string caracteres = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    string clave;
+    // Inicializar la semilla del generador de números aleatorios
+    srand(std::time(0));
+    for (int i = 0; i < longitud; ++i) {
+        int indice = rand() % caracteres.length();
+        clave += caracteres[indice];
+    }
+    return clave;
 }
 //Funcion que calcula el tamaño de la pantalla
 int tamPantalla(){
