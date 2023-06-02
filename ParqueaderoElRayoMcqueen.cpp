@@ -1,5 +1,5 @@
 /*
-Autores: Juan P醗z Camilo Galeano
+Autores: Juan P谩ez Camilo Galeano
 Programa: Parqueadero}
 Fecha: 2 de Julio del 2023
 */
@@ -32,7 +32,7 @@ struct vehiculo{
 	string color;
 	string marca;
 	string modelo;
-	int tipo; //(1)Autom髒iles, camperos, camionetas y veh韈ulos pesados (2)Motocicletas (3)Bicicletas
+	int tipo; //(1)Autom贸viles, camperos, camionetas y veh铆culos pesados (2)Motocicletas (3)Bicicletas
 };
 //Prototipos
 float calcularTiempo(float horaingre, float horasal, int dias);
@@ -52,7 +52,7 @@ int main(){
 	HWND consoleWindow = GetConsoleWindow();
 	ShowWindow(consoleWindow, SW_MAXIMIZE);
 	int opc;
-	//Ciclo para realizar m醩 consultas
+	//Ciclo para realizar m谩s consultas
 	do{
 		system("cls");
 		run();
@@ -60,11 +60,11 @@ int main(){
 		do{
 			system("cls");
 			mosCen("(1)Nuevo\t(2)Cerrar\n");
-			mosCen("Opci髇: \n");
+			mosCen("Opci贸n: \n");
 			pedCen(1);
 			cin>>opc;
 			if(opc<1 ||opc>2){
-				mosCen("Entrada inv醠ida reintentelo ");
+				mosCen("Entrada inv谩lida reintentelo ");
 				system("pause");
 			}
 		}while(opc<1 ||opc>2);
@@ -83,11 +83,11 @@ void run(){
 	//Ciclo que verifica el valor ingresado
 	do{
 		mosCen("(1)Ingresar\t(2)Salir\n");
-		mosCen("Opci髇: \n");
+		mosCen("Opci贸n: \n");
 		pedCen(1);
 		cin>>opc;
 		if(opc<1 || opc>2){
-			mosCen("Opci髇 inv醠ida\n");
+			mosCen("Opci贸n inv谩lida\n");
 		}
 	}while(opc<1 || opc>2);
 	system("cls");
@@ -130,24 +130,24 @@ void ingresarDatos(){
 	pedCen(9);
 	cin.ignore();
 	getline(cin, cli.apellidos);
-	mosCen("Ingrese su tipo de identificaci髇: \n");
+	mosCen("Ingrese su tipo de identificaci贸n: \n");
 	mosCen("(1)T.I.  (2)C.C.  (3)Otro\n");
-	mosCen("Opci髇: \n");
+	mosCen("Opci贸n: \n");
 	//Ciclo que verifica el valor ingresado
 	do{
 		pedCen(1);
 		cin>>cli.tipoid;
 		if(cli.tipoid<1 || cli.tipoid>3){
-			mosCen("Entrada inv醠ida, reintentelo\n");
+			mosCen("Entrada inv谩lida, reintentelo\n");
 		}
 	}while(cli.tipoid<1 || cli.tipoid>3);
-	mosCen("Ingrese su n鷐ero de identificaci髇 (sin espacios ni puntos): \n");
+	mosCen("Ingrese su n煤mero de identificaci贸n (sin espacios ni puntos): \n");
 	cin.ignore();
 	pedCen(10);
 	cin>>cli.id;
 	system("cls");
 	mosCen("----------------- Datos del vehiculo -----------------\n");
-	mosCen("Ingrese la matricula de su vehiculo (en caso de bicicleta el n鷐ero de la Tarjeta de Propiedad)\n");
+	mosCen("Ingrese la matricula de su vehiculo (en caso de bicicleta el n煤mero de la Tarjeta de Propiedad)\n");
 	pedCen(6);
 	cin.ignore();
 	getline(cin, vehiculo.matricula);
@@ -178,7 +178,7 @@ void mostrarTarifas(){
 	mosCen("Las tarifas de nuestro parqueadero son las siguientes\n");
 	ss << car;
 	string pres = ss.str();
-	string men="Autom髒iles, camperos, camionetas y veh韈ulos pesados: ";
+	string men="Autom贸viles, camperos, camionetas y veh铆culos pesados: ";
 	string resul=men+pres+m1;
 	mosCen(resul);
 	ss1 << mot;
@@ -199,7 +199,7 @@ string generarClaveAleatoria(){
 	int longitud=5;
     string caracteres = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
     string clave;
-    // Inicializar la semilla del generador de n鷐eros aleatorios
+    // Inicializar la semilla del generador de n煤meros aleatorios
     srand(std::time(0));
     for (int i = 0; i < longitud; ++i) {
         int indice = rand() % caracteres.length();
@@ -207,7 +207,7 @@ string generarClaveAleatoria(){
     }
     return clave;
 }
-//Funcion que calcula el tama駉 de la pantalla
+//Funcion que calcula el tama帽o de la pantalla
 int tamPantalla(){
 	CONSOLE_SCREEN_BUFFER_INFO csbi;
     GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &csbi);
@@ -224,6 +224,8 @@ void mosCen(string mens){
     int espa = (TC - tamTex) / 2;
     cout<<setw(espa)<<""<<mens;
 }
+
+//Me gusta su mam谩
 
 
 
