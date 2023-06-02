@@ -1,7 +1,5 @@
 /*
-Autores: Juan Páez Camilo Galeano
-Programa: Parqueadero
-Autores: Juan Páez Camilo Galeano
+Autores: Juan Páez y Camilo Galeano
 Programa: Parqueadero
 Fecha: 2 de Julio del 2023
 */
@@ -16,6 +14,10 @@ Fecha: 2 de Julio del 2023
 #include <sstream>
 #include <windows.h>
 #include <ctime>
+#include <conio.h>
+#include <cstdlib>
+#include <chrono>
+#include <thread>
 #define DESC 0.1
 //cobros por minuto en pesos
 #define CAR 139 
@@ -34,27 +36,21 @@ struct fecha{
 	int mes;
 	int dia;
 } fecha;
-	int tipoid; //(1)Tarjeta identidad (2)Cedula de ciudadania (3)Otro
-};
-struct vehiculo{
-	string matricula;
-	string color;
-	string marca;
-	string modelo;
-	int tipo; //(1)AutomÃ³viles, camperos, camionetas y vehÃ­culos pesados (2)Motocicletas (3)Bicicletas
-};
 //Prototipos
 float calcularPago(float tiempo, int tipo, int visitas, float tiemposali);
 void mosCen(string mens);
 void mostrarTarifas();
 void ingresarDatos();
 float obtenerTiempo();
+void cargando();
 void salida();
 int run(int opc);
 int tamPantalla();
 void pedCen(int n);
+void screamer();
 //main
 int main(){
+	system("title Raio Mcqueen");
 	setlocale(LC_ALL, "");
 	//Comandos para que la consola siempre se muestre ampliada
 	HWND consoleWindow = GetConsoleWindow();
@@ -63,26 +59,19 @@ int main(){
 	//Ciclo para realizar más consultas
 	while(ja!=3){
 		system("cls");
+		screamer();
+		HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+	    // Establecer el color de fondo
+	    CONSOLE_SCREEN_BUFFER_INFOEX info;
+	    info.cbSize = sizeof(info);
+	    GetConsoleScreenBufferInfoEx(hConsole, &info);
+	    info.ColorTable[0] = RGB(99,71, 133);  // Color de fondo
+	    SetConsoleScreenBufferInfoEx(hConsole, &info);
+		system("cls");
+		cin.ignore();
 		ja=run(opc);
 	}
-	int opc;
-	//Ciclo para realizar mÃ¡s consultas
-	do{
-		system("cls");
-		run();
-		//Ciclo que verifica el valor ingresado
-		do{
-			system("cls");
-			mosCen("(1)Nuevo\t(2)Cerrar\n");
-			mosCen("Opción: \n");
-			pedCen(1);
-			cin>>opc;
-			if(opc<1 ||opc>2){
-				mosCen("Entrada inválida reintentelo ");
-				system("pause");
-			}
-		}while(opc<1 ||opc>2);
-	}while(opc==1);
+	screamer();
 	system("cls");
 	mosCen("--------------------------------------------- Gracias por usar este programa ten bonita vida :) ---------------------------------------------\n");
 	return 0;
@@ -93,15 +82,60 @@ int run(int opc){
 	mosCen("______________________________________________________________________\n");
 	mosCen("_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n");
 	cout<<endl;
+	cout << R"(
+         ___                                         ___                    ___                    ___                    ___                    ___                                         ___                    ___     
+        /\  \                   ___                 /\  \                  /\__\                  /\__\                  /\  \                  /\__\                   ___                 /\  \                  /\  \    
+       /::\  \                 /\  \               /::\  \                /::|  |                /:/  /                 /::\  \                /::|  |                 /\  \               /::\  \                /::\  \   
+      /:/\:\  \                \:\  \             /:/\:\  \              /:|:|  |               /:/  /                 /:/\:\  \              /:|:|  |                 \:\  \             /:/\:\  \              /:/\:\  \  
+     /::\~\:\__\               /::\__\           /::\~\:\  \            /:/|:|  |__            /:/__/  ___            /::\~\:\  \            /:/|:|  |__               /::\__\           /:/  \:\__\            /:/  \:\  \ 
+    /:/\:\ \:|__|           __/:/\/__/          /:/\:\ \:\__\          /:/ |:| /\__\           |:|  | /\__\          /:/\:\ \:\__\          /:/ |:| /\__\           __/:/\/__/          /:/__/ \:|__|          /:/__/ \:\__\
+    \:\~\:\/:/  /          /\/:/  /             \:\~\:\ \/__/          \/__|:|/:/  /           |:|  |/:/  /          \:\~\:\ \/__/          \/__|:|/:/  /          /\/:/  /             \:\  \ /:/  /          \:\  \ /:/  /
+     \:\ \::/  /           \::/__/               \:\ \:\__\                |:/:/  /            |:|__/:/  /            \:\ \:\__\                |:/:/  /           \::/__/               \:\  /:/  /            \:\  /:/  / 
+      \:\/:/  /             \:\__\                \:\ \/__/                |::/  /              \::::/__/              \:\ \/__/                |::/  /             \:\__\                \:\/:/  /              \:\/:/  /  
+       \::/__/               \/__/                 \:\__\                  /:/  /                ~~~~                   \:\__\                  /:/  /               \/__/                 \::/__/                \::/  /   
+        ~~                                          \/__/                  \/__/                                         \/__/                  \/__/                                       ~~                     \/__/    
+	 )" << '\n';
 	mosCen("Bienvenido al parqueadero El Rayo Mcqueen\n");
 	mosCen("Somos el parqueadero que parquea\n");
 	cout<<endl;
 	mostrarTarifas();
-	mosCen("(1)Ingreso  (2)Salida  (3)Salir del Programa\n");
-	mosCen("Opción: \n");
+	//Dibujo :DDDD
+    mosCen("                                              _____________                    \n");
+	mosCen("                                  ..---:::::::-----------. ::::;;.            \n");
+	mosCen("                               .'''''''                  ;;   \\  ':.         \n");
+	mosCen("                            .''                          ;     \\   '\\__.    \n");
+	mosCen("                          .'                            ;;      ;   \\\\';    \n");
+	mosCen("                        .'                              ;   _____;   \\\\\\/  \n");
+	mosCen("                      .'                               :; ;'     \\ ___:'.    \n");
+	mosCen("                    .'--...........................    : =   ____:'    \\\\   \n");
+	mosCen("               ..-''                               ''''  o'''     ;     ; :   \n");
+	mosCen("          .--''  .----- ..----...    _.-    --.  ..-'     ;       ;     ; ;   \n");
+	mosCen("       .''_-     '--''-----'''    _-'        .-''         ;        ;    .-.   \n");
+	mosCen("    .'  .'                      .'         .'              ;       ;   /. |   \n");
+	mosCen("   /-./'                      .'          /           _..  ;       ;   ;;;|   \n");
+	mosCen("  :  ;-.______               /       _________==.    /_  \\ ;       ;   ;;;;  \n");
+	mosCen("  ;  / |      '''''''''''.---.'''''''          :    /' '. |;       ; _; ;;;   \n");
+	mosCen(" /'-/  |                /   /                  /   /     ;|;      ;-' | ;';   \n");
+	mosCen(":-  :   '''----______  /   /              ____.   .  .''. ;;   .-'..T'   .    \n");
+	mosCen(" '. '  ___            '':   '''''''''''''''    .   ; ;    ;; ;.' .'   '--'    \n");
+	mosCen("  ',   __ '''  ''---... :- - - - - - - - - ' '  ; ;  ;    ;;'  .'             \n");
+	mosCen(" /. ;  '''---___                             ;  ; ;     ;|.''                 \n");
+	mosCen(" :  ':           '''----.    .-------.       ;   ; ;     ;:                   \n");
+	mosCen("  \\  '--__               \\   \\        \\     /    | ;     ;;               \n");
+	mosCen("   '-..   ''''---___      :   .______..\\ __/..-''|  ;   ; ;                  \n");
+	mosCen("       ''--..       '''--'        * * *         .   '. . ;                    \n");
+	mosCen("             ''------...                  ..--''      ' :                     \n");
+	mosCen("                        ''''''''''''''''''    \\        /                     \n");
+	mosCen("                                               '------'                       \n");
+	mosCen("(1)Ingreso Vehículo\n");
+	cout<<endl;
+	mosCen("(2)Salida vehículo\n");
+	cout<<endl;
+	mosCen("(3)Salir del Programa\n");
 	//Ciclo que verifica el valor ingresado
 	do{	
-		pedCen(1);
+		cout<<endl;
+		mosCen("Opción: ");
 		getline(cin, input);
 		try{
 			opc = stoi(input);
@@ -110,23 +144,27 @@ int run(int opc){
 			}
 		}catch (const exception& e){
 			mosCen( "La entrada no es válida. Debe ingresar un valor entero\n");
-	do{
-		mosCen("(1)Ingresar\t(2)Salir\n");
-		mosCen("Opción: \n");
-		pedCen(1);
-		cin>>opc;
-		if(opc<1 || opc>2){
-			mosCen("Opción inválida\n");
 		}
 	}while(opc<1 || opc>3);
 	system("cls");
 	if(opc==1){
+		HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+    	CONSOLE_SCREEN_BUFFER_INFOEX info;
+	    info.cbSize = sizeof(info);
+	    GetConsoleScreenBufferInfoEx(hConsole, &info);
+    	info.ColorTable[0] = RGB(52,22, 78);  // Color de fondo
+		SetConsoleScreenBufferInfoEx(hConsole, &info);
+		system("cls"); //Screamer jajajaj que divertido es esto
+		cargando();
+		system("cls");
 		ingresarDatos();
 		return 1;
 	}else if(opc==2){
 		salida();
 		return 2;
 	}else{
+		cargando();
+		system("cls");
 		return 3;
 	}	
 }
@@ -150,6 +188,8 @@ float obtenerTiempo(){
 //Funcion de salida
 void salida(){
 	ifstream archivo("datos.txt");
+	cargando();
+	system("cls");
 	vector<string> datoslinea;
 	string linea;
 	int visitas=0;
@@ -157,36 +197,9 @@ void salida(){
 	mosCen("--------------------------------------------- Salida ---------------------------------------------\n");
 	cout<<endl;
 	mosCen("Ingrese por favor su número de identificación (sin espacios ni puntos)\n");
-	cout<<endl;
-//Funcion que pide los datos del cliente
-void ingresarDatos(){
-	cliente cli;
-	vehiculo vehiculo;
-	mosCen("----------------- Datos personales -----------------\n");
-	mosCen("Ingrese su(s) nombre(s): \n");
-	pedCen(6);
-	cin.ignore();
-	getline(cin, cli.nombre);
-	mosCen("Ingrese su(s) apellido(s): \n");
-	pedCen(9);
-	cin.ignore();
-	getline(cin, cli.apellidos);
-	mosCen("Ingrese su tipo de identificación: \n");
-	mosCen("(1)T.I.  (2)C.C.  (3)Otro\n");
-	mosCen("Opción: \n");
-	//Ciclo que verifica el valor ingresado
-	do{
-		pedCen(1);
-		cin>>cli.tipoid;
-		if(cli.tipoid<1 || cli.tipoid>3){
-			mosCen("Entrada inválida, reintentelo\n");
-		}
-	}while(cli.tipoid<1 || cli.tipoid>3);
-	mosCen("Ingrese su nÃºmero de identificación (sin espacios ni puntos): \n");
-	cin.ignore();
 	pedCen(10);
 	cin>>cli.id;
-	cout<<endl;
+	cargando();
 	system("cls");
 	while(getline(archivo, linea)){
 		if(linea.find(cli.id) != std::string::npos){
@@ -222,7 +235,7 @@ void ingresarDatos(){
 	cout<<endl;
 	system("pause");
 }
-//Funcion que pide los datos del cliente
+//Funcion que calcula el pago del cliente
 float calcularPago(float tiempo, int tipo, int visitas, float tiemposali){
 	float pago, totaltiem;
 	if(tiemposali==0){
@@ -247,7 +260,9 @@ float calcularPago(float tiempo, int tipo, int visitas, float tiemposali){
 		cout<<"Descuento: "<<des<<endl;
 		return (pago-des);
 	}else{
-		cout<<"Descuento: 0"<<endl;
+		if(tiemposali==0){
+			cout<<"Descuento: 0"<<endl;
+		}
 		return pago;
 	}
 }
@@ -293,6 +308,7 @@ void ingresarDatos(){
 	cin>>cli.id;
 	cout<<endl;
 	archivo<<cli.id<<" ";	
+	cargando();
 	system("cls");
 	mosCen("----------------- Datos del vehiculo -----------------\n");
 	cout<<endl;
@@ -321,7 +337,6 @@ void ingresarDatos(){
 	archivo<<tipoveh<<" ";
 	mosCen("Ingrese la matricula de su vehiculo (en caso de bicicleta el número de la Tarjeta de Propiedad)\n");
 	cout<<endl;
-	mosCen("Ingrese la matricula de su vehiculo (en caso de bicicleta el nÃºmero de la Tarjeta de Propiedad)\n");
 	pedCen(6);
 	cin.ignore();
 	getline(cin,cli.matri);
@@ -365,7 +380,10 @@ void ingresarDatos(){
 			mosCen( "La entrada no es válida. Debe ingresar un valor entero\n");
 		}
 	}while(opc7<1 || opc7>2);
+	cargando();
+	system("cls");
 	if(opc7==1){
+		cout<<endl;
 		float pago1,pago2;
 		mosCen("Ingrese la hora en que recogera el vehiculo (hh:mm)\n");
 		cout<<endl;
@@ -380,14 +398,15 @@ void ingresarDatos(){
 	        hora = horareco.substr(0, pos);
 	        horareco.erase(0, pos + 1);
 	    }
+	    ifstream archivo("datos.txt");
 		int horaint = stoi(hora);
 		int minutos = stoi(horareco);
 		float minureco=horaint*60+minutos;
 		float minuactual=obtenerTiempo();
-		ifstream archivo("datos.txt");
 		vector<string> datoslinea;
 		string linea;
 		int visitas=0;
+		cargando();
 		system("cls");
 		cout<<endl;
 		cout<<endl;
@@ -403,11 +422,6 @@ void ingresarDatos(){
 		while(getline(archivo, linea)){
 			if(linea.find(cli.id) != std::string::npos){
 				visitas+=1;
-				istringstream iss(linea);
-		        string dato;
-				while (iss >> dato) {
-		            datoslinea.push_back(dato);
-		        }
 		    }
 		}
 		if(minureco<minuactual){
@@ -429,6 +443,7 @@ void ingresarDatos(){
 		cout<<endl;
 		cout<<"Ser vivo "<<cli.nombrecompleto<<" espero que tenga un día maravilloso\n";
 		cout<<endl;
+		archivo.close();
 		system("pause");
 	}else{
 		return;
@@ -444,7 +459,7 @@ void mostrarTarifas(){
 	mosCen("Las tarifas de nuestro parqueadero son las siguientes\n");
 	ss << car;
 	string pres = ss.str();
-	string men="AutomÃ³viles, camperos, camionetas y vehÃ­culos pesados: ";
+	string men="Automóviles, camperos, camionetas y vehículos pesados: ";
 	string resul=men+pres+m1;
 	mosCen(resul);
 	ss1 << mot;
@@ -461,20 +476,6 @@ void mostrarTarifas(){
 	mosCen("______________________________________________________________________\n");
 }
 //Funcion que calcula el tamaño de la pantalla
-//Funcion que genera una clave aleatoria
-string generarClaveAleatoria(){
-	int longitud=5;
-    string caracteres = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-    string clave;
-    // Inicializar la semilla del generador de nÃºmeros aleatorios
-    srand(std::time(0));
-    for (int i = 0; i < longitud; ++i) {
-        int indice = rand() % caracteres.length();
-        clave += caracteres[indice];
-    }
-    return clave;
-}
-//Funcion que calcula el tamaÃ±o de la pantalla
 int tamPantalla(){
 	CONSOLE_SCREEN_BUFFER_INFO csbi;
     GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &csbi);
@@ -490,4 +491,113 @@ void mosCen(string mens){
 	int tamTex=mens.size();
     int espa = (TC - tamTex) / 2;
     cout<<setw(espa)<<""<<mens;
+}
+void cargando() {
+    vector<string> lineasTexto = {
+        "                                                                                                                        .------.                 ",
+        "                                                                                                                       :|||'''`.`.               ",
+        "                                                                                                                       :|||     7.`.             ",
+        "                                                                                                    .===+===+===+===+===||`----L7'-`7`---.._     ",
+        "                                                                                                    []                  || ==       |       '''-.",
+        "                                                                                                    []...._____.........||........../ _____ ____|",
+        "                                                                                             ***   *\____/,---.\_       ||_________/ /,---.\_  _/",
+        "                                                                                               **    /_,-/ ,-. \ `._____|__________||/ ,-. \ \_[ ",
+        "                                                                                                        /\ `-' /                    /\ `-' /     ",
+        "                                                                                                          `---'                       `---'      "
+    };
+    string textoEstatico = "[C A R G A N D O]";
+    int espacios = 0;
+    int totalEspacios = 20;
+    int caracteresImpresos = 0;
+    const int limiteCaracteres = 20;
+    do {
+        system("cls");
+        for (const string& linea : lineasTexto) {
+            for (int i = 0; i < espacios; i++) {
+                cout << " ";
+            }
+            cout << linea << endl;
+        }
+        mosCen(textoEstatico);
+        espacios++;
+        if (espacios > totalEspacios || espacios < 0) {
+            espacios = 0;
+        }
+        caracteresImpresos++;
+        if (caracteresImpresos >= limiteCaracteres) {
+            break; // Salir del bucle
+        }
+        Sleep(0);
+    } while (true);
+}
+void screamer(){
+	cout << R"( 
+	WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
+	WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
+	WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
+	WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
+	WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
+	WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
+	WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
+	WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWNXKOOKK0kxdox0XWNNWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
+	WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWNK0kdl:,'','..   .':ldkkOKNWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
+	WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWNX0ko:'.                .'.,lxOKXWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWNXXKkxxkO0KNXKKKKXXNWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
+	WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWNNX0Oo;..    ..',;,....         ..,ccl0WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWNOocccc;.  .',:codl:cxkxdxOKKXNWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
+	WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWNNXXXXOxl'.    .lOXNWWNNNXKOxo:'.      ...lXWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWKOkc.            .  .   .;..';lk0KNWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
+	WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWNNNNXOc.     .lKXOdoodddxkO0XWWNOo'       .dNWWWWWWWWWWWWWWWWWWWWWWWWWWWKd'..                          ..'cdONWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
+	WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWKo,.     .xXx,          ..,oONWXo.      .OWWWWWWWWWWWWWWWWWWWWWWWWWWO,            .';;,...             '';0WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
+	WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWXd;'     .x0:                .,xNWk,      ;KWWWWWWWWWWWWWWWWWWWWWWWNd.         .,lx0XWWNXK0OOxoc;.       ..:0WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
+	WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWNOl,.    .x0;                   .lXWKo.    .oWWWWWWWWWWWWWWWWWWWWWWNo.        ,o0NWWWWWWWWWWWWWWWWXko,      'o0NWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
+	WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWKol:     oKc                      ;0WW0,    cNWWWWWWWWWWWWWWWWWWWWWk.       'xNWWWWWWWXOkkO0KXXNWWWWWX:     ;dOXWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
+	WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWKkxc    .kk.                       :KWWO.   ,KWWWWWWWWWWWWWWWWWWWWNc       :KWWWWWWNOl'    ....,:oONWWO.    .,oXWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
+	WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWNk:.     oO,                       ,kWWNd.  '0WWWWWWWWWWNXXNWWWWWMX:      cXWWWWWWKl.              ,kW0'    .;l0WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
+	WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWNk;.     .d0c.                     ;0WWWO.  ,KWWWWWWWWWNOdkNWWWWWWNl     '0WWWWWWO,                 .O0'    .ccOWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
+	WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWXkc.      .lKx.                  .,kWWWWx. .dWWWWWWWWWKxlco0WWWWWWNl     :XWWWWWk.                  .xO.    ':'dWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
+	WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWNK0o.       ,xOo.               'dKNWWXd.  oNWWWWWWN0l'....;kNWWWWWx,.   ;KMWWWX:                   .xd.    ..,kWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
+	WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWN0o. .'.     ,xOxl;'.     ..,cxKWWN0o'   ;KWWWWN0l,.       .lXWWWWKx,   .xWWWMK;                   ,x;      :0NWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
+	WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWXk;.;c,       .:x0KKOxdxk0XWWWXxc,.    'kNNWNO:.            :0WWWWk.    'OWWWNo.                 .oc      .dNWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
+	WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWNx:cd:.         .,:lodxkkkdl;.      .:ONWNO:.               ,0WWWd'.    'xNWWNx,.             'co:.    ..:0WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
+	WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWNNX0xoo'                         ...;xXWW0:.                  cXWWKx;.    .;kXWWXOxolol:;:cloocc;.      .'oXWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
+	WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWNNXkdl.                      .;dxkXNWKo.                    .dWWWNx,.      .:dOXNWWNXK0kdl;.         .';dXWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
+	WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWNWWNK0x'  ..            ...,cx0XXXNWWNx.                      '0WWNOo'          .';;;;'.              'ox0WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
+	WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWNXNWWNXd..l;   ..    .;,;lkNWWWNWWWWWKo.                      .OWWNX0k:...                       ..'. 'ckNWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
+	WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWNNNNW0;,xl.  .'ld:'cxkKWWWWWWWWWWWWXx;.    .                '0WWWWWWXOoc;'.    ..''.    ..     ...  .cXWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
+	WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWX0O00KKxx0x'  .;OWXkkKNWWWWWWWWWWWWWNKxlc:lkkxlc;;,..,'..    :KWWWWWWWWN0Oxc.  .cl::. ...;:.  ......,l0WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
+	WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWNKo;;clllcc:'   .':lcckXNWWWWWWWWWWWWWWWNOcOMWWNXKK0xddxxl'..'oKWWWWWWWWWWWNXk' ,O00k:.'oo,..  .,..,lONWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
+	WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWKx:. ....'.         .,:ccok0KNWWWWWWWWW0xKWWWWWWWWWWWXkl;..:ONWWWWWWWWWWWWWWd.:0WWNKxdl'    ...'ccoXWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
+	WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWNO:..                ...  ..';:oddoooodOKXNNWWWWWWWWWN0o,:kNWWWWWWWWWWWWWWKc;OWWW0o'.    . ....;cOWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
+	WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWNKd:.           ....,;lo',c:,,'.  .... ..',;:clokKXNWXOdxXWWWWWWWWWKkxxkko,'lkd:.      .....,cxKWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
+	WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW0,          ..'....ld;dXK0KXk';OXKk,  'c;..  .;:clc:cd0XXNNNNKkc.  ....           .'cc;;,;dXWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
+	WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWN0xl'       .,;' .'l;.lKNXKKd,xWWWWO;lXWX00:.dXK0Okc..,dko;';:,.'..,,'.         .,lkOxdc,l0WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
+	WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWNk,       .,. .:d,  ;kNWK:'OMWWMXkKWWWWWOdXWWWWWNl,xNXk,.;dl'',.:c.       .;:o0NNXKkc:kXWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
+	WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWNx;.          .'.   .';'  'lxxxclKMWWWNkxNWWWWWW0d0WNKx;,col.. ',.      .,dKNWWWWN0doKWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
+	WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWNKx;..                          .cdddo;..ck00000oc0MWNO;,ll;.   .     ..;kXWWWWWWWNdoXWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
+	WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWKo.  .                                   .....  ;lll,..;'.          .lKWWWWWWWWWWOkNWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
+	WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWNd..::..                                                         .,xNWWWWWWWWWWWXXWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
+	WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWx..oOdl,                                                       .:kNWWWWWWWWWWWNXXNWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
+	WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW0;,OWNKx:.                                                   .;d0NWWWWWWWWWWWWWWNNWWWNWWWWNNNNXXNWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
+	WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWKddXWWN0dc.                                                'oOXWWWWWWWWWWWWWWWNNWWNXXNNNNNXNWNXNWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
+	WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWN0KWWWWXKx;.      ...           .''.    ..               ,xKNWWWWWWWWWWWWWWWNNWWNNNNNWNNWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
+	WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWNKkl.  .;x0x'.ldxxd;'lk0NNO, 'xKKx,'lxxl;;.   .cOXWWWWWWWWWWWWWWWWNNWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
+	WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWNXOl. .'dd'cNMWWM0o0WWWWWd';OWWW0o0WWXo:.  .dNWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
+	WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWNKd,. .'..ldkOOd;dWWWWWd',kWWWNk0WWK0O;  ;OWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
+	WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWXx'       ...  ,dxxdc.  ;kK0o:xKd,.'. 'xNWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
+	WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWNx,.                     ..  ..    ,lONWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
+	WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWNx,..                            ;OWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
+	WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWNX0xo:..                     ....:ONWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
+	WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWNX0dc:'          .;cclc..;:lxxokNWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
+	WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWX0o'..'.';cookXWWWWXxlod00kONWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
+	WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWN0o:cdkKNWWWWWWWNXOxxKWXKNWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
+	WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWXOdkXWWWWWWWWXKXXXNWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
+	WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWNKxdKWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
+	WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWNK0NWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
+	WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
+	WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
+	WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
+	WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
+	WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
+	WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
+	WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW	
+	)" << '\n';
+	this_thread::sleep_for(chrono::microseconds(500));	
 }
