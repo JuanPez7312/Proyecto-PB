@@ -1,6 +1,11 @@
 /*
+<<<<<<< HEAD
 Autores: Juan P醗z Camilo Galeano
 Programa: Parqueadero
+=======
+Autores: Juan P谩ez Camilo Galeano
+Programa: Parqueadero}
+>>>>>>> af9be925280435b5c6a4b4fb8c3fc7d71a9f7d33
 Fecha: 2 de Julio del 2023
 */
 //librerias
@@ -25,6 +30,7 @@ using namespace std;
 struct cliente{
 	string nombrecompleto;
 	string id;
+<<<<<<< HEAD
 	string matri;
 } cli;
 struct fecha{
@@ -32,6 +38,17 @@ struct fecha{
 	int mes;
 	int dia;
 } fecha;
+=======
+	int tipoid; //(1)Tarjeta identidad (2)Cedula de ciudadania (3)Otro
+};
+struct vehiculo{
+	string matricula;
+	string color;
+	string marca;
+	string modelo;
+	int tipo; //(1)Autom贸viles, camperos, camionetas y veh铆culos pesados (2)Motocicletas (3)Bicicletas
+};
+>>>>>>> af9be925280435b5c6a4b4fb8c3fc7d71a9f7d33
 //Prototipos
 float calcularPago(float tiempo, int tipo, int visitas, float tiemposali);
 void mosCen(string mens);
@@ -48,12 +65,33 @@ int main(){
 	//Comandos para que la consola siempre se muestre ampliada
 	HWND consoleWindow = GetConsoleWindow();
 	ShowWindow(consoleWindow, SW_MAXIMIZE);
+<<<<<<< HEAD
 	int opc=0, ja=0;
 	//Ciclo para realizar m醩 consultas
 	while(ja!=3){
 		system("cls");
 		ja=run(opc);
 	}
+=======
+	int opc;
+	//Ciclo para realizar m谩s consultas
+	do{
+		system("cls");
+		run();
+		//Ciclo que verifica el valor ingresado
+		do{
+			system("cls");
+			mosCen("(1)Nuevo\t(2)Cerrar\n");
+			mosCen("Opci贸n: \n");
+			pedCen(1);
+			cin>>opc;
+			if(opc<1 ||opc>2){
+				mosCen("Entrada inv谩lida reintentelo ");
+				system("pause");
+			}
+		}while(opc<1 ||opc>2);
+	}while(opc==1);
+>>>>>>> af9be925280435b5c6a4b4fb8c3fc7d71a9f7d33
 	system("cls");
 	mosCen("--------------------------------------------- Gracias por usar este programa ten bonita vida :) ---------------------------------------------\n");
 	return 0;
@@ -71,6 +109,7 @@ int run(int opc){
 	mosCen("(1)Ingreso  (2)Salida  (3)Salir del Programa\n");
 	mosCen("Opci髇: \n");
 	//Ciclo que verifica el valor ingresado
+<<<<<<< HEAD
 	do{	
 		pedCen(1);
 		getline(cin, input);
@@ -81,6 +120,15 @@ int run(int opc){
 			}
 		}catch (const exception& e){
 			mosCen( "La entrada no es v醠ida. Debe ingresar un valor entero\n");
+=======
+	do{
+		mosCen("(1)Ingresar\t(2)Salir\n");
+		mosCen("Opci贸n: \n");
+		pedCen(1);
+		cin>>opc;
+		if(opc<1 || opc>2){
+			mosCen("Opci贸n inv谩lida\n");
+>>>>>>> af9be925280435b5c6a4b4fb8c3fc7d71a9f7d33
 		}
 	}while(opc<1 || opc>3);
 	system("cls");
@@ -111,6 +159,7 @@ float obtenerTiempo(){
     tiempo+=(seg/60);
   	return tiempo;
 }
+<<<<<<< HEAD
 //Funcion de salida
 void salida(){
 	ifstream archivo("datos.txt");
@@ -122,6 +171,34 @@ void salida(){
 	cout<<endl;
 	mosCen("Ingrese por favor su n鷐ero de identificaci髇 (sin espacios ni puntos)\n");
 	cout<<endl;
+=======
+//Funcion que pide los datos del cliente
+void ingresarDatos(){
+	cliente cli;
+	vehiculo vehiculo;
+	mosCen("----------------- Datos personales -----------------\n");
+	mosCen("Ingrese su(s) nombre(s): \n");
+	pedCen(6);
+	cin.ignore();
+	getline(cin, cli.nombre);
+	mosCen("Ingrese su(s) apellido(s): \n");
+	pedCen(9);
+	cin.ignore();
+	getline(cin, cli.apellidos);
+	mosCen("Ingrese su tipo de identificaci贸n: \n");
+	mosCen("(1)T.I.  (2)C.C.  (3)Otro\n");
+	mosCen("Opci贸n: \n");
+	//Ciclo que verifica el valor ingresado
+	do{
+		pedCen(1);
+		cin>>cli.tipoid;
+		if(cli.tipoid<1 || cli.tipoid>3){
+			mosCen("Entrada inv谩lida, reintentelo\n");
+		}
+	}while(cli.tipoid<1 || cli.tipoid>3);
+	mosCen("Ingrese su n煤mero de identificaci贸n (sin espacios ni puntos): \n");
+	cin.ignore();
+>>>>>>> af9be925280435b5c6a4b4fb8c3fc7d71a9f7d33
 	pedCen(10);
 	cin>>cli.id;
 	cout<<endl;
@@ -233,6 +310,7 @@ void ingresarDatos(){
 	archivo<<cli.id<<" ";	
 	system("cls");
 	mosCen("----------------- Datos del vehiculo -----------------\n");
+<<<<<<< HEAD
 	cout<<endl;
 	mosCen("Ingrese el tipo de vehiculo que ingresa\n");
 	cout<<endl;
@@ -259,6 +337,9 @@ void ingresarDatos(){
 	archivo<<tipoveh<<" ";
 	mosCen("Ingrese la matricula de su vehiculo (en caso de bicicleta el n鷐ero de la Tarjeta de Propiedad)\n");
 	cout<<endl;
+=======
+	mosCen("Ingrese la matricula de su vehiculo (en caso de bicicleta el n煤mero de la Tarjeta de Propiedad)\n");
+>>>>>>> af9be925280435b5c6a4b4fb8c3fc7d71a9f7d33
 	pedCen(6);
 	cin.ignore();
 	getline(cin,cli.matri);
@@ -381,7 +462,7 @@ void mostrarTarifas(){
 	mosCen("Las tarifas de nuestro parqueadero son las siguientes\n");
 	ss << car;
 	string pres = ss.str();
-	string men="Autom髒iles, camperos, camionetas y veh韈ulos pesados: ";
+	string men="Autom贸viles, camperos, camionetas y veh铆culos pesados: ";
 	string resul=men+pres+m1;
 	mosCen(resul);
 	ss1 << mot;
@@ -397,7 +478,24 @@ void mostrarTarifas(){
 	mosCen("_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n");
 	mosCen("______________________________________________________________________\n");
 }
+<<<<<<< HEAD
 //Funcion que calcula el tama駉 de la pantalla
+=======
+//Funcion que genera una clave aleatoria
+string generarClaveAleatoria(){
+	int longitud=5;
+    string caracteres = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    string clave;
+    // Inicializar la semilla del generador de n煤meros aleatorios
+    srand(std::time(0));
+    for (int i = 0; i < longitud; ++i) {
+        int indice = rand() % caracteres.length();
+        clave += caracteres[indice];
+    }
+    return clave;
+}
+//Funcion que calcula el tama帽o de la pantalla
+>>>>>>> af9be925280435b5c6a4b4fb8c3fc7d71a9f7d33
 int tamPantalla(){
 	CONSOLE_SCREEN_BUFFER_INFO csbi;
     GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &csbi);
@@ -414,3 +512,14 @@ void mosCen(string mens){
     int espa = (TC - tamTex) / 2;
     cout<<setw(espa)<<""<<mens;
 }
+<<<<<<< HEAD
+=======
+
+//Me gusta su mam谩
+
+
+
+
+
+
+>>>>>>> af9be925280435b5c6a4b4fb8c3fc7d71a9f7d33
